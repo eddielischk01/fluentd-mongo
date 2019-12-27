@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  mongo:
+    image: "mongo:3.6"
+    ports:
+      - "27017:27017"
+  fluentd:
+    build: ./fluentd
+    depends_on: 
+      - mongo
+    links:
+      - mongo:mongo
+    ports:
+      - "24224:24224/tcp"
+    volumes:
+      - ./fluentd/fluentd.conf:/etc/fluentd.conf
+  fluentd-bit:
+    image: "fluent/fluent-bit:latest"
+    depends_on: 
+      - fluentd
+    links:
+      - fluentd:fluentd
+    ports:
+      - "24225:24224/tcp"
+    volumes:
+      - ./fluentd-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./logs:/var/log/test
