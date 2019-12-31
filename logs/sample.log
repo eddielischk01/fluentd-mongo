@@ -1,1 +1,4 @@
-{"key1": 12345, "key2": "abc", "time": "28/Jul/2006:10:22:04 -0300"}
+{"name":"myapp","hostname":"apple.local","pid":40161,"level":30,"msg":"hi","time": "2013-01-04T18:46:23.853Z","v":0}
+{"name":"myapp","hostname":"banana.local","pid":40161,"level":40,"lang":"fr","meta": { "a": "1", "b": "2" }, "msg":"au revoir","time":"2013-01-04T18:46:23.853Z","v":0}
+{"name":"myapp","hostname":"cat.local","pid":40161,"level":40,"lang":"fr","meta": "try", "msg":"xxx","time":"2013-01-04T18:46:23.853Z","v":0}
+

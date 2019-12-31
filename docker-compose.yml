@@ -3,7 +3,7 @@ services:
   mongo:
     image: "mongo:3.6"
     ports:
-      - "27017:27017"
+      - "27018:27017"
   fluentd:
     build: ./fluentd
     depends_on:
@@ -14,12 +14,12 @@ services:
       - ./fluentd/fluentd.conf:/fluentd/etc/fluentd.conf
     command: ["fluentd", "-c", "/fluentd/etc/fluentd.conf"]
   fluentd-bit:
-    image: "fluent/fluent-bit:latest"
+    image: "fluent/fluent-bit:1.0.4-debug"
     depends_on:
       - fluentd
     links:
       - fluentd:fluentd
     volumes:
       - ./fluentd-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-      - ./fluentd-bit/parsers.conf:/fluent-bit/etc/parsers.conf
       - ./logs/sample.log:/var/log/test/sample.log
+      - ./temp/tail.log:/var/log/tail.log
