@@ -22,4 +22,4 @@ services:
     volumes:
       - ./fluentd-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
       - ./logs/sample.log:/var/log/test/sample.log
-      - ./temp/tail.log:/var/log/tail.log
+      # - ./temp/tail.db:/var/log/tail.db
