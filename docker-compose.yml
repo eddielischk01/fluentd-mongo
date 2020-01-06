@@ -4,22 +4,35 @@ services:
     image: "mongo:3.6"
     ports:
       - "27018:27017"
-  fluentd:
+  fluentd-forwarder:
+    build: ./fluentd
+    depends_on:
+      - fluentd-aggregator-a
+      - fluentd-aggregator-b
+    links:
+      - fluentd-aggregator-a:fluentd-aggregator-a
+      - fluentd-aggregator-b:fluentd-aggregator-b
+    volumes:
+      - ./fluentd/fluentd-forwarder.conf:/fluentd/etc/fluentd.conf
+      - ./logs/sample.log:/var/log/test/sample.log
+      - ./logs/sample.log.pos:/var/log/test/sample.log.pos
+    command: ["fluentd", "-c", "/fluentd/etc/fluentd.conf"]
+  fluentd-aggregator-a:
     build: ./fluentd
     depends_on:
       - mongo
     links:
       - mongo:mongo
     volumes:
-      - ./fluentd/fluentd.conf:/fluentd/etc/fluentd.conf
+      - ./fluentd/fluentd-aggregator.conf:/fluentd/etc/fluentd.conf
     command: ["fluentd", "-c", "/fluentd/etc/fluentd.conf"]
-  fluentd-bit:
-    image: "fluent/fluent-bit:1.0.4-debug"
+  fluentd-aggregator-b:
+    build: ./fluentd
     depends_on:
-      - fluentd
+      - mongo
     links:
-      - fluentd:fluentd
+      - mongo:mongo
     volumes:
-      - ./fluentd-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-      - ./logs/sample.log:/var/log/test/sample.log
-      # - ./temp/tail.db:/var/log/tail.db
+      - ./fluentd/fluentd-aggregator.conf:/fluentd/etc/fluentd.conf
+    command: ["fluentd", "-c", "/fluentd/etc/fluentd.conf"]
+  
